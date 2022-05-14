@@ -10,3 +10,9 @@ services:
       - "8083:80"
     volumes:
       - ./code/src:/src
+    depends_on:
+      - db
+    links:
+      - db
+  db:
+    image: mongo:3.6.3

@@ -27,19 +27,5 @@ class Configuration(object):
     ENV = get_env_variable("ENV")
     PORT = get_env_variable("PORT")
     TOKEN = get_env_variable("TOKEN")
-    LOGGER = get_env_variable("LOGGER")
     LOGLEVEL = get_env_variable("LOGLEVEL")
     JWT_SECRET_KEY = get_env_variable("JWT_SECRET_KEY")
-
-    MONGO_HOST = get_env_variable("MONGO_HOST")
-    MONGO_PORT = get_env_variable("MONGO_PORT")
-    MONGO_USER = get_env_variable("MONGO_USER")
-    MONGO_PASS = get_env_variable("MONGO_PASS")
-
-    MONGO_CONFIGS = {
-        "host": MONGO_HOST,
-        "port": MONGO_PORT,
-        "username": MONGO_USER,
-        "password": MONGO_PASS,
-        "env": ENV,
-    }

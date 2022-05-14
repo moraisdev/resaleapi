@@ -3,11 +3,12 @@ from flask_restful import Resource, reqparse
 from flask_restplus import Resource
 from src.app.middleware.auth import authenticate
 from src.restplus import api, ns_property
-
-
+from src.app.services.mongo import mongo_connection
+import json
 @ns_property.route("/create")
 class PostProperty(Resource):
     @api.doc(description="Create a new property")
+    #@authenticate
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("property_id", type=str, required=True, location="json")
@@ -16,8 +17,8 @@ class PostProperty(Resource):
         parser.add_argument("description", type=str, required=True, location="json")
         parser.add_argument("status", type=bool, required=True, location="json")
         parser.add_argument("characteristics", type=str, required=True, location="json")
-        parser.add_argument("type", type=str, type=str, required=True, location="json")
-        parser.add_argument("purpose", type=list, required=True, location="json")
+        parser.add_argument("type", type=str, required=True, location="json")
+        parser.add_argument("purpose", type=str, required=True, location="json")
         parser.add_argument("evaluated_value", type=float, required=True, location="json")
         parser.add_argument("property_value", type=float, required=True, location="json")
         body = parser.parse_args()
@@ -36,40 +37,37 @@ class PostProperty(Resource):
         }
 
         try:
-            connection_mongo = current_app.config["MONGO"]["resale"]["property"]
-            connection_mongo.insert(payload)
+            mongo_connection().property.insert_one(payload)
             return Response( "success", status=200, mimetype="application/json")
         except Exception as e:
-            return Response( str(e), status=500, mimetype="application/json")
-
+            return Response(str(e), status=500, mimetype="application/json")
 
 @ns_property.route("/<string:property_id>")
 class GetProperty(Resource):
-    @authenticate
+    #@authenticate
     @api.doc(description="Route to return property")
     def get(self, property_id):
         try:
-            connection_mongo = current_app.config["MONGO"]["resale"]["property"]
-            result = connection_mongo.find_one({"property_id": property_id})
+            result = mongo_connection().property.find_one({"property_id": property_id})
             return Response( str(result), status=200, mimetype="application/json")
         except Exception as e:
             return Response( str(e), status=500, mimetype="application/json")
 
 @ns_property.route("/update/<string:property_id>")
 class PutProperty(Resource):
-    @authenticate
+    #@authenticate
     @api.doc(description="Route to update property")
-    def post(self, property_id):
+    def put(self, property_id):
         parser = reqparse.RequestParser()
         parser.add_argument("name", type=str, required=True, location="json")
         parser.add_argument("address", type=str, required=True, location="json")
         parser.add_argument("description", type=str, required=True, location="json")
         parser.add_argument("status", type=bool, required=True, location="json")
         parser.add_argument("characteristics", type=str, required=True, location="json")
-        parser.add_argument("type", type=str, type=str, required=True, location="json")
-        parser.add_argument("purpose", type=list, required=True, location="json")
-        parser.add_argument("evaluated_value", type=dict, required=True, location="json")
-        parser.add_argument("property_value", type=dict, required=True, location="json")
+        parser.add_argument("type", type=str, required=True, location="json")
+        parser.add_argument("purpose", type=str, required=True, location="json")
+        parser.add_argument("evaluated_value", type=float, required=True, location="json")
+        parser.add_argument("property_value", type=float, required=True, location="json")
         body = parser.parse_args()
         
         payload = {
@@ -86,20 +84,18 @@ class PutProperty(Resource):
         }
 
         try:
-            connection_mongo = current_app.config["MONGO"]["resale"]["property"]
-            connection_mongo.update({"property_id": property_id}, payload)
+            mongo_connection().property.update_one({"property_id": property_id}, {"$set": payload})
             return Response( "success", status=200, mimetype="application/json")
         except Exception as e:
             return Response( str(e), status=500, mimetype="application/json")
 
 @ns_property.route("/delete/<string:property_id>")
 class DeleteProperty(Resource):
-    @authenticate
+    #@authenticate
     @api.doc(description="Route to delete property")
-    def post(self, property_id):
+    def get(self, property_id):
         try:
-            connection_mongo = current_app.config["MONGO"]["resale"]["property"]
-            connection_mongo.remove({"property_id": property_id})
+            mongo_connection().property.delete_one({"property_id": property_id})
             return Response( "success", status=200, mimetype="application/json")
         except Exception as e:
             return Response( str(e), status=500, mimetype="application/json")
