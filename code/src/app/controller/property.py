@@ -1,10 +1,8 @@
-from flask import Response, current_app
-from flask_restful import Resource, reqparse
+from flask import Response
+from flask_restful import reqparse
 from flask_restplus import Resource
-from src.app.middleware.auth import authenticate
 from src.restplus import api, ns_property
 from src.app.services.mongo import mongo_connection
-import json
 @ns_property.route("/create")
 class PostProperty(Resource):
     @api.doc(description="Create a new property")

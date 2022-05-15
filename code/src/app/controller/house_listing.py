@@ -1,10 +1,9 @@
-from flask import Response, current_app
+from flask import Response
 from flask_restful import Resource, reqparse
 from flask_restplus import Resource
 from src.app.middleware.auth import authenticate
 from src.restplus import api, ns_house_listing
 from src.app.services.mongo import mongo_connection
-import json
 @ns_house_listing.route("/create")
 class PostHouseListing(Resource):
     @authenticate
@@ -14,10 +13,10 @@ class PostHouseListing(Resource):
         parser.add_argument(
             "house_listing_id", type=str, required=True, location="json"
         )
-        parser.add_argument("name", type=list, required=True, location="json")
-        parser.add_argument("type", type=list, required=True, location="json")
-        parser.add_argument("commission", type=list, required=True, location="json")
-        parser.add_argument("sales_channel", type=list, required=True, location="json")
+        parser.add_argument("name", type=str, required=True, location="json")
+        parser.add_argument("type", type=str, required=True, location="json")
+        parser.add_argument("commission", type=float, required=True, location="json")
+        parser.add_argument("sales_channel", type=str, required=True, location="json")
         body = parser.parse_args()
 
         payload = {
@@ -53,10 +52,10 @@ class PutHouseListing(Resource):
     @api.doc(description="Update a house listing by id")
     def put(self, house_listing_id):
         parser = reqparse.RequestParser()
-        parser.add_argument("name", type=list, required=True, location="json")
-        parser.add_argument("type", type=list, required=True, location="json")
-        parser.add_argument("commission", type=list, required=True, location="json")
-        parser.add_argument("sales_channel", type=list, required=True, location="json")
+        parser.add_argument("name", type=str, required=True, location="json")
+        parser.add_argument("type", type=str, required=True, location="json")
+        parser.add_argument("commission", type=float, required=True, location="json")
+        parser.add_argument("sales_channel", type=str, required=True, location="json")
         body = parser.parse_args()
 
         payload = {

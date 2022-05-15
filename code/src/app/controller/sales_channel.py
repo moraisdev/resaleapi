@@ -1,10 +1,9 @@
-from flask import Response, current_app
-from flask_restful import Resource, reqparse
+from flask import Response
+from flask_restful import reqparse
 from flask_restplus import Resource
 from src.app.middleware.auth import authenticate
 from src.restplus import api, ns_sales_channel
 from src.app.services.mongo import mongo_connection
-import json
 
 @ns_sales_channel.route("/create")
 class PostSalesChannel(Resource):
@@ -12,13 +11,9 @@ class PostSalesChannel(Resource):
     @api.doc(description="Create a new sales channel")
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument(
-            "sales_channel_id", type=str, required=True, location="json"
-        )
-        parser.add_argument("name", type=list, required=True, location="json")
-        parser.add_argument(
-            "type_sales_channel", type=list, required=True, location="json"
-        )
+        parser.add_argument("sales_channel_id", type=str, required=True, location="json")
+        parser.add_argument("name", type=str, required=True, location="json")
+        parser.add_argument("type_sales_channel", type=str, required=True, location="json")
         body = parser.parse_args()
 
         payload = {
@@ -52,9 +47,9 @@ class PutSalesChannel(Resource):
     @api.doc(description="Update a sales channel by id")
     def put(self, sales_channel_id):
         parser = reqparse.RequestParser()
-        parser.add_argument("name", type=list, required=True, location="json")
+        parser.add_argument("name", type=str, required=True, location="json")
         parser.add_argument(
-            "type_sales_channel", type=list, required=True, location="json"
+            "type_sales_channel", type=str, required=True, location="json"
         )
         body = parser.parse_args()
 
