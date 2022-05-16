@@ -15,4 +15,5 @@ services:
     links:
       - db
   db:
-    image: mongo:3.6.3
+    image: mongo
+    container_name: mongodb

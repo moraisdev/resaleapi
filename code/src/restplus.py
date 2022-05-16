@@ -36,8 +36,9 @@ api = Server().api
 
 ns_property = api.namespace("property")
 ns_sales_channel = api.namespace("sales_channel")
-ns_house_listing = api.namespace("house_listing")
+ns_wallet_listing = api.namespace("wallet_listing")
 ns_portal_listing = api.namespace("portal")
+
 
 def configure(app):
     api.init_app(app)
