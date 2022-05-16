@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from flask_restplus import Api
 from src.app.settings import Configuration
 

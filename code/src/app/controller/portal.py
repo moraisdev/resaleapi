@@ -11,7 +11,7 @@ from src.restplus import api, ns_portal_listing
 
 @ns_portal_listing.route("/associate")
 class PostAssociate(Resource):
-    # @authenticate
+    @authenticate
     @api.doc(description="Associate property to wallet")
     def post(self):
         parser = reqparse.RequestParser()
@@ -40,7 +40,7 @@ class PostAssociate(Resource):
 
 @ns_portal_listing.route("/list")
 class GetPortalList(Resource):
-    # @authenticate
+    @authenticate
     @api.doc(description="Get all portal listings")
     def get(self):
         try:

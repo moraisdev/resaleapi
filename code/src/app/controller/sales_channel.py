@@ -8,7 +8,7 @@ from src.restplus import api, ns_sales_channel
 
 @ns_sales_channel.route("/create")
 class PostSalesChannel(Resource):
-    # @authenticate
+    @authenticate
     @api.doc(description="Create a new sales channel")
     def post(self):
         parser = reqparse.RequestParser()

@@ -3,12 +3,12 @@ from flask_restful import reqparse
 from flask_restplus import Resource
 from src.app.services.mongo import mongo_connection
 from src.restplus import api, ns_property
-
+from src.app.middleware.auth import authenticate
 
 @ns_property.route("/create")
 class PostProperty(Resource):
     @api.doc(description="Create a new property")
-    # @authenticate
+    @authenticate
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("property_id", type=int, required=True, location="json")
@@ -49,7 +49,7 @@ class PostProperty(Resource):
 
 @ns_property.route("/<string:property_id>")
 class GetProperty(Resource):
-    # @authenticate
+    @authenticate
     @api.doc(description="Route to return property")
     def get(self, property_id):
         try:
@@ -61,7 +61,7 @@ class GetProperty(Resource):
 
 @ns_property.route("/update/<string:property_id>")
 class PutProperty(Resource):
-    # @authenticate
+    @authenticate
     @api.doc(description="Route to update property")
     def put(self, property_id):
         parser = reqparse.RequestParser()
@@ -104,7 +104,7 @@ class PutProperty(Resource):
 
 @ns_property.route("/delete/<string:property_id>")
 class DeleteProperty(Resource):
-    # @authenticate
+    @authenticate
     @api.doc(description="Route to delete property")
     def get(self, property_id):
         try:
